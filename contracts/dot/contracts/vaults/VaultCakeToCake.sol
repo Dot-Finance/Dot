@@ -64,8 +64,6 @@ contract VaultCakeToCake is VaultController, IStrategy {
         require(_minter != address(0), "minter must be set");
         __VaultController_init(CAKE);
         CAKE.safeApprove(address(CAKE_MASTER_CHEF), uint(~0));
-
-        setMinter(_minter);
     }
 
     /* ========== VIEW FUNCTIONS ========== */
