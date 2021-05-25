@@ -75,17 +75,17 @@ contract PriceCalculatorBSC is IPriceCalculator, OwnableUpgradeable {
         return uint(price).mul(1e10);
     }
 
-    function priceOfCake() view public returns (uint) {
+    function priceOfCake() view external returns (uint) {
         (, uint cakePriceInUSD) = valueOfAsset(CAKE, 1e18);
         return cakePriceInUSD;
     }
 
-    function priceOfPink() view public returns (uint) {
+    function priceOfPink() view external returns (uint) {
         (, uint pinkPriceInUSD) = valueOfAsset(PINK, 1e18);
         return pinkPriceInUSD;
     }
 
-    function pricesInUSD(address[] memory assets) public view override returns (uint[] memory) {
+    function pricesInUSD(address[] memory assets) external view override returns (uint[] memory) {
         uint[] memory prices = new uint[](assets.length);
         for (uint i = 0; i < assets.length; i++) {
             (, uint valueInUSD) = valueOfAsset(assets[i], 1e18);

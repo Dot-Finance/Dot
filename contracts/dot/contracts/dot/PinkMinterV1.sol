@@ -188,7 +188,7 @@ contract PinkMinterV1 is IPinkMinterV1, OwnableUpgradeable {
         return 0;
     }
 
-    function performanceFee(uint profit) public view override returns (uint) {
+    function performanceFee(uint profit) external view override returns (uint) {
         return profit.mul(PERFORMANCE_FEE).div(FEE_MAX);
     }
 

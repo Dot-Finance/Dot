@@ -52,7 +52,7 @@ contract VaultFlipToFlip is VaultController, IStrategy {
     IMasterChef private constant CAKE_MASTER_CHEF = IMasterChef(0x73feaa1eE314F8c655E354234017bE2193C9E24E);
     PoolConstant.PoolTypes public constant override poolType = PoolConstant.PoolTypes.FlipToFlip;
 
-    ZapBSC public constant zapBSC = ZapBSC(0xdC2bBB0D33E0e7Dea9F5b98F46EDBaC823586a0C);
+    ZapBSC public constant zapBSC;
 
     uint private constant DUST = 1000;
 
@@ -78,13 +78,14 @@ contract VaultFlipToFlip is VaultController, IStrategy {
 
     /* ========== INITIALIZER ========== */
 
-    function initialize(uint _pid) external initializer {
+    function initialize(uint _pid, ZapBSC _zapBSC) external initializer {
         require(_pid != 0, "VaultFlipToFlip: pid must not be zero");
 
         (address _token,,,) = CAKE_MASTER_CHEF.poolInfo(_pid);
         __VaultController_init(IBEP20(_token));
         _stakingToken.safeApprove(address(CAKE_MASTER_CHEF), uint(-1));
         pid = _pid;
+        zapBSC = _zapBSC;
 
         CAKE.safeApprove(address(zapBSC), uint(-1));
     }
@@ -104,7 +105,7 @@ contract VaultFlipToFlip is VaultController, IStrategy {
         return balance().mul(sharesOf(account)).div(totalShares);
     }
 
-    function withdrawableBalanceOf(address account) public view override returns (uint) {
+    function withdrawableBalanceOf(address account) external view override returns (uint) {
         return balanceOf(account);
     }
 

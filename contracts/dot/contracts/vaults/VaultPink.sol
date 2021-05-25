@@ -103,7 +103,7 @@ contract VaultPink is VaultController, IStrategy, ReentrancyGuardUpgradeable {
         return 1e18;
     }
 
-    function earned(address) override public view returns (uint) {
+    function earned(address) override external view returns (uint) {
         return 0;
     }
 
@@ -151,7 +151,7 @@ contract VaultPink is VaultController, IStrategy, ReentrancyGuardUpgradeable {
         emit PinkPaid(msg.sender, pinkAmount, 0);
     }
 
-    function harvest() public override {
+    function harvest() external override {
     }
 
     /* ========== RESTRICTED FUNCTIONS ========== */

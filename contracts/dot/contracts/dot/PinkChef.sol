@@ -42,13 +42,9 @@ contract PinkChef is IPinkChef, OwnableUpgradeable {
     using SafeMath for uint;
     using SafeBEP20 for IBEP20;
 
-    /* ========== CONSTANTS ============= */
-
-    // PinkToken public constant PINK = PinkToken(0xC9849E6fdB743d08fAeE3E34dd2D1bc69EA11a51);
-
     /* ========== STATE VARIABLES ========== */
 
-    PinkToken public PINK;
+    PinkToken public pinkToken;
 
     address[] private _vaultList;
     mapping(address => VaultInfo) vaults;
@@ -90,7 +86,7 @@ contract PinkChef is IPinkChef, OwnableUpgradeable {
     /* ========== INITIALIZER ========== */
 
     function initialize(uint _startBlock, uint _pinkPerBlock, PinkToken _token) external initializer {
-        PINK = _token;
+        pinkToken = _token;
 
         __Ownable_init();
 
@@ -116,7 +112,7 @@ contract PinkChef is IPinkChef, OwnableUpgradeable {
         return vaultUsers[vault][user];
     }
 
-    function pendingPink(address vault, address user) public view override returns (uint) {
+    function pendingPink(address vault, address user) external view override returns (uint) {
         UserInfo storage userInfo = vaultUsers[vault][user];
         VaultInfo storage vaultInfo = vaults[vault];
 
@@ -142,7 +138,7 @@ contract PinkChef is IPinkChef, OwnableUpgradeable {
         _vaultList.push(vault);
     }
 
-    function updateVault(address vault, uint allocPoint) public onlyOwner {
+    function updateVault(address vault, uint allocPoint) external onlyOwner {
         require(vaults[vault].token != address(0), "PinkChef: vault must be set");
         bulkUpdateRewards();
 
@@ -216,7 +212,7 @@ contract PinkChef is IPinkChef, OwnableUpgradeable {
     /* ========== SALVAGE PURPOSE ONLY ========== */
 
     function recoverToken(address _token, uint amount) virtual external onlyOwner {
-        require(_token != address(PINK), "PinkChef: cannot recover PINK token");
+        require(_token != address(pinkToken), "PinkChef: cannot recover pink token");
         IBEP20(_token).safeTransfer(owner(), amount);
     }
 }

@@ -72,8 +72,6 @@ abstract contract VaultController is IVaultController, PausableUpgradeable, Whit
     function __VaultController_init(IBEP20 token) internal initializer {
         __PausableUpgradeable_init();
         __WhitelistUpgradeable_init();
-
-        keeper = 0x793074D9799DC3c6039F8056F1Ba884a73462051; // TODO: change the address
         _stakingToken = token;
     }
 
@@ -102,7 +100,7 @@ abstract contract VaultController is IVaultController, PausableUpgradeable, Whit
         keeper = _keeper;
     }
 
-    function setMinter(address newMinter) virtual public onlyOwner {
+    function setMinter(address newMinter) virtual external onlyOwner {
         // can zero
         _minter = IPinkMinterV1(newMinter);
         if (newMinter != address(0)) {
@@ -112,13 +110,13 @@ abstract contract VaultController is IVaultController, PausableUpgradeable, Whit
         }
     }
 
-    function setPink(address _token) public onlyOwner {
+    function setPink(address _token) external onlyOwner {
         require(_token != address(0), 'VaultController: invalid pink token address');
         require(address(pink) == address(0), 'VaultController: setPink only once');
         pink = BEP20(_token);
     }
 
-    function setPinkChef(IPinkChef newPinkChef) virtual public onlyOwner {
+    function setPinkChef(IPinkChef newPinkChef) virtual external onlyOwner {
         require(address(_pinkChef) == address(0), 'VaultController: setPinkChef only once');
         _pinkChef = newPinkChef;
     }
