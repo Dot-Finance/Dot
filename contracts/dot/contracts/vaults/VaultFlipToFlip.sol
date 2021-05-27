@@ -52,7 +52,7 @@ contract VaultFlipToFlip is VaultController, IStrategy {
     IMasterChef private constant CAKE_MASTER_CHEF = IMasterChef(0x73feaa1eE314F8c655E354234017bE2193C9E24E);
     PoolConstant.PoolTypes public constant override poolType = PoolConstant.PoolTypes.FlipToFlip;
 
-    ZapBSC public constant zapBSC;
+    ZapBSC public zapBSC;
 
     uint private constant DUST = 1000;
 

@@ -37,7 +37,7 @@ contract PinkPool is IStrategyLegacy, RewardsDistributionRecipient, ReentrancyGu
 
     /* ========== Pink HELPER ========= */
     IStrategyHelper public helper;
-    IPancakeRouter02 private constant ROUTER = IPancakeRouter02(0x05fF2B0DB69458A0750badebc4f9e13aDd608C7F);
+    IPancakeRouter02 private constant ROUTER = IPancakeRouter02(0x10ED43C718714eb63d5aA57B78B54704E256024E);
 
     /* ========== CONSTRUCTOR ========== */
 

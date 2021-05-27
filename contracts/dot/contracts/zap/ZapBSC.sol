@@ -49,7 +49,7 @@ contract ZapBSC is OwnableUpgradeable {
     address private constant BTCB = 0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c;
     address private constant ETH = 0x2170Ed0880ac9A755fd29B2688956BD959F933F8;
 
-    IPancakeRouter02 private constant ROUTER = IPancakeRouter02(0x05fF2B0DB69458A0750badebc4f9e13aDd608C7F);
+    IPancakeRouter02 private constant ROUTER = IPancakeRouter02(0x10ED43C718714eb63d5aA57B78B54704E256024E);
 
     /* ========== STATE VARIABLES ========== */
 
@@ -143,7 +143,7 @@ contract ZapBSC is OwnableUpgradeable {
 
     function _approveTokenIfNeeded(address token) private {
         if (IBEP20(token).allowance(address(this), address(ROUTER)) == 0) {
-            IBEP20(token).safeApprove(address(ROUTER), uint(~0));
+            IBEP20(token).safeApprove(address(ROUTER), uint(- 1));
         }
     }
 
