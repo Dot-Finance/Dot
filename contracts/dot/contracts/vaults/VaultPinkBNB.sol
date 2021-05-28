@@ -92,7 +92,6 @@ contract VaultPinkBNB is VaultController, IStrategy, RewardsDistributionRecipien
 
     function initialize(address _token, uint _pid) external initializer {
         require(_token != address(0), "token must be set");
-        require(address(_rewardsToken) != address(0), "Rewards Token must be set");
         __VaultController_init(IBEP20(_token));
         __RewardsDistributionRecipient_init();
         __ReentrancyGuard_init();
