@@ -164,7 +164,6 @@ contract VaultFlipToFlip is VaultController, IStrategy {
         uint withdrawalFee = canMint() ? _minter.withdrawalFee(principal, depositTimestamp) : 0;
         uint performanceFee = canMint() ? _minter.performanceFee(profit) : 0;
         if (withdrawalFee.add(performanceFee) > DUST) {
-            // TODO single mintFor
             _minter.mintFor(address(_stakingToken), withdrawalFee, performanceFee, msg.sender, depositTimestamp);
 
             if (performanceFee > 0) {
@@ -216,7 +215,6 @@ contract VaultFlipToFlip is VaultController, IStrategy {
         uint depositTimestamp = _depositedAt[msg.sender];
         uint withdrawalFee = canMint() ? _minter.withdrawalFee(amount, depositTimestamp) : 0;
         if (withdrawalFee > DUST) {
-            // TODO single mintFor
             _minter.mintFor(address(_stakingToken), withdrawalFee, 0, msg.sender, depositTimestamp);
             amount = amount.sub(withdrawalFee);
         }
@@ -237,7 +235,6 @@ contract VaultFlipToFlip is VaultController, IStrategy {
         uint depositTimestamp = _depositedAt[msg.sender];
         uint performanceFee = canMint() ? _minter.performanceFee(amount) : 0;
         if (performanceFee > DUST) {
-            // TODO single mintFor
             _minter.mintFor(address(_stakingToken), 0, performanceFee, msg.sender, depositTimestamp);
             amount = amount.sub(performanceFee);
         }

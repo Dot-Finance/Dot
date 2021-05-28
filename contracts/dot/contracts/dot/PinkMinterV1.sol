@@ -34,6 +34,7 @@ import "../interfaces/IPinkMinterV1.sol";
 import "../interfaces/IStakingRewards.sol";
 import "../interfaces/IPriceCalculator.sol";
 
+import "../zap/ZapBSC.sol";
 import "../library/SafeToken.sol";
 
 contract PinkMinterV1 is IPinkMinterV1, OwnableUpgradeable {
@@ -55,7 +56,7 @@ contract PinkMinterV1 is IPinkMinterV1, OwnableUpgradeable {
     address public deployer;
     address public treasury;
     address public timelock;
-    PriceCalculatorBSC public priceCalculator;
+    IPriceCalculator public priceCalculator;
     mapping(address => bool) private _minters;
 
     uint public PERFORMANCE_FEE;
@@ -102,7 +103,7 @@ contract PinkMinterV1 is IPinkMinterV1, OwnableUpgradeable {
         require(_treasury != address(0), "treasury must be set");
         treasury = _treasury;
         require(_priceCalculator != address(0), "priceCalculator must be set");
-        priceCalculator = PriceCalculatorBSC(_priceCalculator);
+        priceCalculator = IPriceCalculator(_priceCalculator);
         WITHDRAWAL_FEE_FREE_PERIOD = 3 days;
         WITHDRAWAL_FEE = 50;
         PERFORMANCE_FEE = 3000;
