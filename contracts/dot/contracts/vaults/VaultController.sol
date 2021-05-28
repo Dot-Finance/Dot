@@ -72,8 +72,6 @@ abstract contract VaultController is IVaultController, PausableUpgradeable, Whit
     function __VaultController_init(IBEP20 token) internal initializer {
         __PausableUpgradeable_init();
         __WhitelistUpgradeable_init();
-
-        keeper = 0x793074D9799DC3c6039F8056F1Ba884a73462051; // TODO: change the address
         _stakingToken = token;
     }
 

@@ -36,8 +36,8 @@ contract PinkPool is IStrategyLegacy, RewardsDistributionRecipient, ReentrancyGu
     mapping(address => bool) private _stakePermission;
 
     /* ========== Pink HELPER ========= */
-    IStrategyHelper public helper = IStrategyHelper(0xA84c09C1a2cF4918CaEf625682B429398b97A1a0);
-    IPancakeRouter02 private constant ROUTER = IPancakeRouter02(0x05fF2B0DB69458A0750badebc4f9e13aDd608C7F);
+    IStrategyHelper public helper;
+    IPancakeRouter02 private constant ROUTER = IPancakeRouter02(0x10ED43C718714eb63d5aA57B78B54704E256024E);
 
     /* ========== CONSTRUCTOR ========== */
 
@@ -96,7 +96,7 @@ contract PinkPool is IStrategyLegacy, RewardsDistributionRecipient, ReentrancyGu
         _bnb = rewardPerTokenPerSecond.mul(365 days).mul(flipPrice).div(PinkPrice);
     }
 
-    function withdrawableBalanceOf(address account) override public view returns (uint) {
+    function withdrawableBalanceOf(address account) override external view returns (uint) {
         return _balances[account];
     }
 

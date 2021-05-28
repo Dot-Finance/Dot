@@ -90,9 +90,8 @@ contract VaultPinkBNB is VaultController, IStrategy, RewardsDistributionRecipien
 
     /* ========== INITIALIZER ========== */
 
-    function initialize(address _token, address _rewardsToken, uint _pid) external initializer {
+    function initialize(address _token, uint _pid) external initializer {
         require(_token != address(0), "token must be set");
-        require(_rewardsToken != address(0), "Rewards Token must be set");
         __VaultController_init(IBEP20(_token));
         __RewardsDistributionRecipient_init();
         __ReentrancyGuard_init();
@@ -100,9 +99,8 @@ contract VaultPinkBNB is VaultController, IStrategy, RewardsDistributionRecipien
         setPid(_pid);
         _stakingToken.safeApprove(address(CAKE_MASTER_CHEF), uint(-1));
 
-        rewardsDuration = 24 hours; // TODO shorter in the new version: 4 hours
+        rewardsDuration = 24 hours;
         rewardsDistribution = msg.sender;
-        setRewardsToken(_rewardsToken);
     }
 
     /* ========== VIEWS ========== */
