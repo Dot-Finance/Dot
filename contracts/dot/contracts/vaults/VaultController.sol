@@ -57,6 +57,7 @@ abstract contract VaultController is IVaultController, PausableUpgradeable, Whit
 
     /* ========== Event ========== */
 
+    event KeeperUpdated(address indexed _before, address indexed _after);
     event Recovered(address token, uint amount);
 
 
@@ -97,7 +98,10 @@ abstract contract VaultController is IVaultController, PausableUpgradeable, Whit
 
     function setKeeper(address _keeper) external onlyKeeper {
         require(_keeper != address(0), 'VaultController: invalid keeper address');
+        address keeperBefore = keeper;
         keeper = _keeper;
+
+        emit KeeperUpdated(keeperBefore, keeper);
     }
 
     function setMinter(address newMinter) virtual public onlyOwner {
