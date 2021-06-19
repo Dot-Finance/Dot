@@ -35,7 +35,7 @@ import "../interfaces/IStakingRewards.sol";
 import "../interfaces/IPancakeRouter02.sol";
 
 
-contract CompensationTreasury is WhitelistUpgradeable {
+contract Treasury is WhitelistUpgradeable {
     using SafeBEP20 for IBEP20;
     using SafeMath for uint;
     using SafeToken for address;
@@ -52,6 +52,9 @@ contract CompensationTreasury is WhitelistUpgradeable {
     address public constant LIT_BNB = 0x1F37d4226d23d09044B8005c127C0517BD7e94fD;
     address public constant LINA_BUSD = 0xC5768c5371568Cf1114cddD52CAeD163A42626Ed;
     address public constant RAMP_BUSD = 0xE834bf723f5bDff34a5D1129F3c31Ea4787Bc76a;
+    address public constant USDT_BUSD = 0x7EFaEf62fDdCCa950418312c6C91Aef321375A00;
+    address public constant USDC_BUSD = 0x2354ef4DF11afacb85a5C7f98B624072ECcddbB1;
+    address public constant DAI_BUSD = 0x66FDB2eCCfB58cF098eaa419e5EfDe841368e489;
 
     /* ========== STATE VARIABLES ========== */
 
@@ -90,8 +93,8 @@ contract CompensationTreasury is WhitelistUpgradeable {
 
     /* ========== VIEW FUNCTIONS ========== */
 
-    function flips() public pure returns (address[8] memory) {
-        return [REEF_BNB, DOT_BNB, USDT_BNB, BUSD_BNB, LINK_BNB, LIT_BNB, LINA_BUSD, RAMP_BUSD];
+    function flips() public pure returns (address[11] memory) {
+        return [REEF_BNB, DOT_BNB, USDT_BNB, BUSD_BNB, LINK_BNB, LIT_BNB, LINA_BUSD, RAMP_BUSD, USDT_BUSD, USDC_BUSD, DAI_BUSD];
     }
 
     /* ========== RESTRICTED FUNCTIONS ========== */
@@ -155,7 +158,7 @@ contract CompensationTreasury is WhitelistUpgradeable {
     }
 
     function zapAllAssetsToPinkBNB() public onlyKeeper {
-        address[8] memory _flips = flips();
+        address[11] memory _flips = flips();
         for (uint i = 0; i < _flips.length; i++) {
             address flip = _flips[i];
             uint balance = IBEP20(flip).balanceOf(address(this));
@@ -174,7 +177,7 @@ contract CompensationTreasury is WhitelistUpgradeable {
     }
 
     function zapAllAssetsAndTransfer() external onlyKeeper {
-        address[8] memory _flips = flips();
+        address[11] memory _flips = flips();
         for (uint i = 0; i < _flips.length; i++) {
             address flip = _flips[i];
             zapSingleAssetAndTransfer(flip);
@@ -184,7 +187,7 @@ contract CompensationTreasury is WhitelistUpgradeable {
     /* ========== PRIVATE FUNCTIONS ========== */
 
     function isTokenExists(address asset) private pure returns (bool exists) {
-        address[8] memory _tokens = flips();
+        address[11] memory _tokens = flips();
         for (uint i = 0; i < _tokens.length; i++) {
             address flip = _tokens[i];
             if (asset == flip) {
