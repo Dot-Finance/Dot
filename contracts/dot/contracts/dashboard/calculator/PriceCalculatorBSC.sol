@@ -44,7 +44,7 @@ contract PriceCalculatorBSC is IPriceCalculator, OwnableUpgradeable {
     address public constant CAKE = 0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82;
     address public constant BUSD = 0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56;
 
-    IPancakeFactory private constant factory = IPancakeFactory(0xBCfCcbde45cE874adCB698cC183deBcF17952812);
+    IPancakeFactory private constant factory = IPancakeFactory(0xcA143Ce32Fe78f1f7019d7d551a6402fC5350c73);
 
     /* ========== STATE VARIABLES ========== */
 
