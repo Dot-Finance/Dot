@@ -14,18 +14,6 @@ import "../interfaces/IPancakeRouter02.sol";
 import "../interfaces/legacy/IStrategyLegacy.sol";
 
 
-
-// import "@pancakeswap/pancake-swap-lib/contracts/token/BEP20/BEP20.sol";
-// import "@pancakeswap/pancake-swap-lib/contracts/token/BEP20/SafeBEP20.sol";
-// import "@pancakeswap/pancake-swap-lib/contracts/math/SafeMath.sol";
-
-// import "../interfaces/IPinkMinterV1.sol";
-// import "../interfaces/IStakingRewards.sol";
-// import "../interfaces/IPriceCalculator.sol";
-
-// import "../zap/ZapBSC.sol";
-// import "../library/SafeToken.sol";
-
 contract PinkPool is IStrategyLegacy, RewardsDistributionRecipientUpgradeable, ReentrancyGuardUpgradeable, PausableUpgradeable {
     using SafeMath for uint256;
     using SafeBEP20 for IBEP20;
