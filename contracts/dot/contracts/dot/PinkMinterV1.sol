@@ -147,6 +147,12 @@ contract PinkMinterV1 is IPinkMinterV1, OwnableUpgradeable {
     function setPinkPerProfitBNB(uint _ratio) external onlyOwner {
         pinkPerProfitBNB = _ratio;
     }
+    
+    function setPinkPool(address _pinkPool) external onlyOwner {
+        require(_pinkPool != address(0), 'PinkMinterV1: invalid pinkPool address');
+        pinkPool = _pinkPool;
+        IBEP20(pinkToken).approve(pinkPool, uint(-1));
+    }
 
     function setPinkChef(address _pinkChef) external onlyOwner {
         require(pinkChef == address(0), "PinkMinterV1: setPinkChef only once");
