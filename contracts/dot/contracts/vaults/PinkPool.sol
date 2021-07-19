@@ -5,15 +5,28 @@ pragma experimental ABIEncoderV2;
 import "@openzeppelin/contracts/math/Math.sol";
 import "@pancakeswap/pancake-swap-lib/contracts/math/SafeMath.sol";
 import "@pancakeswap/pancake-swap-lib/contracts/token/BEP20/SafeBEP20.sol";
-import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+import "@openzeppelin/contracts-upgradeable/utils/ReentrancyGuardUpgradeable.sol";
 
-import "../library/legacy/RewardsDistributionRecipient.sol";
-import "../library/legacy/Pausable.sol";
+import "../library/RewardsDistributionRecipientUpgradeable.sol";
+import "../library/PausableUpgradeable.sol";
 import "../interfaces/legacy/IStrategyHelper.sol";
 import "../interfaces/IPancakeRouter02.sol";
 import "../interfaces/legacy/IStrategyLegacy.sol";
 
-contract PinkPool is IStrategyLegacy, RewardsDistributionRecipient, ReentrancyGuard, Pausable {
+
+
+// import "@pancakeswap/pancake-swap-lib/contracts/token/BEP20/BEP20.sol";
+// import "@pancakeswap/pancake-swap-lib/contracts/token/BEP20/SafeBEP20.sol";
+// import "@pancakeswap/pancake-swap-lib/contracts/math/SafeMath.sol";
+
+// import "../interfaces/IPinkMinterV1.sol";
+// import "../interfaces/IStakingRewards.sol";
+// import "../interfaces/IPriceCalculator.sol";
+
+// import "../zap/ZapBSC.sol";
+// import "../library/SafeToken.sol";
+
+contract PinkPool is IStrategyLegacy, RewardsDistributionRecipientUpgradeable, ReentrancyGuardUpgradeable, PausableUpgradeable {
     using SafeMath for uint256;
     using SafeBEP20 for IBEP20;
 
@@ -39,16 +52,19 @@ contract PinkPool is IStrategyLegacy, RewardsDistributionRecipient, ReentrancyGu
     IStrategyHelper public helper;
     IPancakeRouter02 private constant ROUTER = IPancakeRouter02(0x10ED43C718714eb63d5aA57B78B54704E256024E);
 
-    /* ========== CONSTRUCTOR ========== */
+    /* ========== INITIALIZER ========== */
 
-    constructor(IBEP20 _stakingToken) public {
-        rewardsDistribution = msg.sender;
-
+    function initialize(IBEP20 _stakingToken, address _rewardsDistribution) external initializer {
+        require(_rewardsDistribution != address(0), "Pool: rewardsDistribution must be set");
+        rewardsDistribution = _rewardsDistribution;
         _stakePermission[msg.sender] = true;
-
+        require(address(_stakingToken) != address(0), "Pool: stakingToken must be set");
         stakingToken = _stakingToken;
-
         stakingToken.safeApprove(address(ROUTER), uint(~0));
+        address wbnb = ROUTER.WETH();
+        IBEP20(wbnb).safeApprove(address(ROUTER), uint(~0));
+
+        __Ownable_init();
     }
 
     /* ========== VIEWS ========== */
@@ -160,23 +176,25 @@ contract PinkPool is IStrategyLegacy, RewardsDistributionRecipient, ReentrancyGu
         uint256 reward = rewards[msg.sender];
         if (reward > 0) {
             rewards[msg.sender] = 0;
-            reward = _flipToWBNB(reward);
-            IBEP20(ROUTER.WETH()).safeTransfer(msg.sender, reward);
+            reward = _flipToPink(reward);
+            IBEP20(stakingToken).safeTransfer(msg.sender, reward);
             emit RewardPaid(msg.sender, reward);
         }
     }
 
-    function _flipToWBNB(uint amount) private returns(uint reward) {
+    function _flipToPink(uint amount) private returns(uint reward) {
         address wbnb = ROUTER.WETH();
-        (uint rewardPink,) = ROUTER.removeLiquidity(
+        uint balanceBefore = IBEP20(stakingToken).balanceOf(address(this));
+        (,uint rewardWBNB) = ROUTER.removeLiquidity(
             address(stakingToken), wbnb,
             amount, 0, 0, address(this), block.timestamp);
         address[] memory path = new address[](2);
-        path[0] = address(stakingToken);
-        path[1] = wbnb;
-        ROUTER.swapExactTokensForTokens(rewardPink, 0, path, address(this), block.timestamp);
+        path[0] = wbnb;
+        path[1] = address(stakingToken);
+        ROUTER.swapExactTokensForTokens(rewardWBNB, 0, path, address(this), block.timestamp);
+        uint balanceAfter = IBEP20(stakingToken).balanceOf(address(this));
 
-        reward = IBEP20(wbnb).balanceOf(address(this));
+        reward = balanceAfter.sub(balanceBefore);
     }
 
     function harvest() override external {}
