@@ -13,7 +13,7 @@ import "./interfaces/legacy/IStrategyHelper.sol";
 
 // no storage
 // There are only calculations for apy, tvl, etc.
-abstract contract StrategyHelperV1 is IStrategyHelper {
+contract StrategyHelperV1 is IStrategyHelper {
     using SafeMath for uint;
     address private constant CAKE_POOL = 0xA527a61703D82139F8a06Bc30097cC9CAA2df5A6;
     address private constant BNB_BUSD_POOL = 0x1B96B92314C44b159149f7E0303511fB2Fc4774f;
