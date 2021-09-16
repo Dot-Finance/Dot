@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.6.12;
+pragma solidity 0.8.7;
 
-import "@pancakeswap/pancake-swap-lib/contracts/token/BEP20/IBEP20.sol";
-import "@pancakeswap/pancake-swap-lib/contracts/token/BEP20/BEP20.sol";
-import "@pancakeswap/pancake-swap-lib/contracts/math/SafeMath.sol";
+import "./library/pancakeswap/IBEP20.sol";
+import "./library/pancakeswap/BEP20.sol";
+import "./library/pancakeswap/SafeMath.sol";
 
 import "./interfaces/IPancakeFactory.sol";
 import "./interfaces/IPancakePair.sol";

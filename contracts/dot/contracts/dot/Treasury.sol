@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.6.12;
+pragma solidity 0.8.7;
 pragma experimental ABIEncoderV2;
 
 /*
@@ -27,7 +27,7 @@ pragma experimental ABIEncoderV2;
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 */
 
-import "@pancakeswap/pancake-swap-lib/contracts/token/BEP20/SafeBEP20.sol";
+import "../library/pancakeswap/SafeBEP20.sol";
 import "../library/WhitelistUpgradeable.sol";
 import "../library/SafeToken.sol";
 import "../zap/ZapBSC.sol";
@@ -130,7 +130,7 @@ contract Treasury is WhitelistUpgradeable {
         }
         else if (keccak256(abi.encodePacked(IPancakePair(asset).symbol())) == keccak256("Cake-LP")) {
             if (IBEP20(asset).allowance(address(this), address(ROUTER)) == 0) {
-                IBEP20(asset).safeApprove(address(ROUTER), uint(- 1));
+                IBEP20(asset).safeApprove(address(ROUTER), type(uint).max);
             }
 
             IPancakePair pair = IPancakePair(asset);
@@ -140,10 +140,10 @@ contract Treasury is WhitelistUpgradeable {
             (uint amountToken0, uint amountToken1) = ROUTER.removeLiquidity(token0, token1, amount, 0, 0, address(this), block.timestamp);
 
             if (IBEP20(token0).allowance(address(this), address(zapBSC)) == 0) {
-                IBEP20(token0).safeApprove(address(zapBSC), uint(- 1));
+                IBEP20(token0).safeApprove(address(zapBSC), type(uint).max);
             }
             if (IBEP20(token1).allowance(address(this), address(zapBSC)) == 0) {
-                IBEP20(token1).safeApprove(address(zapBSC), uint(- 1));
+                IBEP20(token1).safeApprove(address(zapBSC), type(uint).max);
             }
 
             zapBSC.zapInToken(token0, amountToken0, pinkBNBPair);
@@ -151,7 +151,7 @@ contract Treasury is WhitelistUpgradeable {
         }
         else {
             if (IBEP20(asset).allowance(address(this), address(zapBSC)) == 0) {
-                IBEP20(asset).safeApprove(address(zapBSC), uint(- 1));
+                IBEP20(asset).safeApprove(address(zapBSC), type(uint).max);
             }
 
             zapBSC.zapInToken(asset, amount, pinkBNBPair);

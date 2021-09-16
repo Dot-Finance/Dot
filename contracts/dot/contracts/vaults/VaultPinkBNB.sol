@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.6.12;
+pragma solidity ^0.8.7;
 pragma experimental ABIEncoderV2;
 
 /*
@@ -27,11 +27,11 @@ pragma experimental ABIEncoderV2;
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 */
 
-import "@openzeppelin/contracts/math/Math.sol";
-import "@pancakeswap/pancake-swap-lib/contracts/math/SafeMath.sol";
-import "@pancakeswap/pancake-swap-lib/contracts/token/BEP20/SafeBEP20.sol";
-import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
-import "@openzeppelin/contracts-upgradeable/utils/ReentrancyGuardUpgradeable.sol";
+import "@openzeppelin/contracts/utils/math/Math.sol";
+import "../library/pancakeswap/SafeMath.sol";
+import "../library/pancakeswap/SafeBEP20.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
 
 import "../library/RewardsDistributionRecipientUpgradeable.sol";
 import "../interfaces/IStrategy.sol";
@@ -97,7 +97,7 @@ contract VaultPinkBNB is VaultController, IStrategy, RewardsDistributionRecipien
         __ReentrancyGuard_init();
 
         setPid(_pid);
-        _stakingToken.safeApprove(address(CAKE_MASTER_CHEF), uint(-1));
+        _stakingToken.safeApprove(address(CAKE_MASTER_CHEF), type(uint).max);
 
         rewardsDuration = 24 hours;
         rewardsDistribution = msg.sender;
@@ -246,7 +246,7 @@ contract VaultPinkBNB is VaultController, IStrategy, RewardsDistributionRecipien
         VaultController.setMinter(newMinter);
         if (newMinter != address(0)) {
             IBEP20(CAKE).safeApprove(newMinter, 0);
-            IBEP20(CAKE).safeApprove(newMinter, uint(~0));
+            IBEP20(CAKE).safeApprove(newMinter, type(uint).max);
         }
     }
 
@@ -260,7 +260,7 @@ contract VaultPinkBNB is VaultController, IStrategy, RewardsDistributionRecipien
 
         _rewardsToken = IStrategy(newRewardsToken);
         IBEP20(CAKE).safeApprove(newRewardsToken, 0);
-        IBEP20(CAKE).safeApprove(newRewardsToken, uint(~0));
+        IBEP20(CAKE).safeApprove(newRewardsToken, type(uint).max);
     }
 
     function notifyRewardAmount(uint reward) public override onlyRewardsDistribution {

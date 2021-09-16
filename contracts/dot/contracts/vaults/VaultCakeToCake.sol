@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.6.12;
+pragma solidity ^0.8.7;
 pragma experimental ABIEncoderV2;
 
 /*
@@ -27,8 +27,8 @@ pragma experimental ABIEncoderV2;
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 */
 
-import "@pancakeswap/pancake-swap-lib/contracts/token/BEP20/SafeBEP20.sol";
-import "@openzeppelin/contracts/math/Math.sol";
+import "../library/pancakeswap/SafeBEP20.sol";
+import "@openzeppelin/contracts/utils/math/Math.sol";
 
 import "../interfaces/IStrategy.sol";
 import "../interfaces/IMasterChef.sol";
@@ -63,7 +63,7 @@ contract VaultCakeToCake is VaultController, IStrategy {
     function initialize(address _minter) external initializer {
         require(_minter != address(0), "minter must be set");
         __VaultController_init(CAKE);
-        CAKE.safeApprove(address(CAKE_MASTER_CHEF), uint(~0));
+        CAKE.safeApprove(address(CAKE_MASTER_CHEF), type(uint).max);
     }
 
     /* ========== VIEW FUNCTIONS ========== */

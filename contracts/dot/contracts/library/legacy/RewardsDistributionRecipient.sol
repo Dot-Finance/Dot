@@ -32,9 +32,9 @@
 */
 
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.6.2;
+pragma solidity ^0.8.7;
 
-import "@pancakeswap/pancake-swap-lib/contracts/access/Ownable.sol";
+import "../pancakeswap/Ownable.sol";
 
 abstract contract RewardsDistributionRecipient is Ownable {
     address public rewardsDistribution;

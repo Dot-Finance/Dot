@@ -32,9 +32,9 @@
 */
 
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.6.2;
+pragma solidity ^0.8.7;
 
-import "@pancakeswap/pancake-swap-lib/contracts/access/Ownable.sol";
+import "../pancakeswap/Ownable.sol";
 
 
 abstract contract Pausable is Ownable {
@@ -48,7 +48,7 @@ abstract contract Pausable is Ownable {
         _;
     }
 
-    constructor() internal {
+    constructor() {
         require(owner() != address(0), "Owner must be set");
     }
 
@@ -59,7 +59,7 @@ abstract contract Pausable is Ownable {
 
         paused = _paused;
         if (paused) {
-            lastPauseTime = now;
+            lastPauseTime = block.timestamp;
         }
 
         emit PauseChanged(paused);

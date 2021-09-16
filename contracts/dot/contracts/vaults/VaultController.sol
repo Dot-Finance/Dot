@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.6.12;
+pragma solidity ^0.8.7;
 pragma experimental ABIEncoderV2;
 
 /*
@@ -27,8 +27,8 @@ pragma experimental ABIEncoderV2;
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 */
 
-import "@pancakeswap/pancake-swap-lib/contracts/token/BEP20/SafeBEP20.sol";
-import "@pancakeswap/pancake-swap-lib/contracts/token/BEP20/BEP20.sol";
+import "../library/pancakeswap/SafeBEP20.sol";
+import "../library/pancakeswap/BEP20.sol";
 
 import "../interfaces/IPancakeRouter02.sol";
 import "../interfaces/IPancakePair.sol";
@@ -110,7 +110,7 @@ abstract contract VaultController is IVaultController, PausableUpgradeable, Whit
         if (newMinter != address(0)) {
             require(newMinter == pink.getOwner(), 'VaultController: not pink minter');
             _stakingToken.safeApprove(newMinter, 0);
-            _stakingToken.safeApprove(newMinter, uint(~0));
+            _stakingToken.safeApprove(newMinter, type(uint).max);
         }
     }
 
