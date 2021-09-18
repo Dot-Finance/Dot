@@ -1,18 +1,17 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.6.12;
+pragma solidity ^0.8.7;
 pragma experimental ABIEncoderV2;
 
-import "@openzeppelin/contracts/math/Math.sol";
-import "@pancakeswap/pancake-swap-lib/contracts/math/SafeMath.sol";
-import "@pancakeswap/pancake-swap-lib/contracts/token/BEP20/SafeBEP20.sol";
-import "@openzeppelin/contracts-upgradeable/utils/ReentrancyGuardUpgradeable.sol";
+import "@openzeppelin/contracts/utils/math/Math.sol";
+import "../library/pancakeswap/SafeMath.sol";
+import "../library/pancakeswap/SafeBEP20.sol";
+import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
 
 import "../library/RewardsDistributionRecipientUpgradeable.sol";
 import "../library/PausableUpgradeable.sol";
 import "../interfaces/legacy/IStrategyHelper.sol";
 import "../interfaces/IPancakeRouter02.sol";
 import "../interfaces/legacy/IStrategyLegacy.sol";
-
 
 contract PinkPool is IStrategyLegacy, RewardsDistributionRecipientUpgradeable, ReentrancyGuardUpgradeable, PausableUpgradeable {
     using SafeMath for uint256;
@@ -48,9 +47,9 @@ contract PinkPool is IStrategyLegacy, RewardsDistributionRecipientUpgradeable, R
         _stakePermission[msg.sender] = true;
         require(address(_stakingToken) != address(0), "Pool: stakingToken must be set");
         stakingToken = _stakingToken;
-        stakingToken.safeApprove(address(ROUTER), uint(~0));
+        stakingToken.safeApprove(address(ROUTER), type(uint).max);
         address wbnb = ROUTER.WETH();
-        IBEP20(wbnb).safeApprove(address(ROUTER), uint(~0));
+        IBEP20(wbnb).safeApprove(address(ROUTER), type(uint).max);
 
         __Ownable_init();
     }
@@ -218,11 +217,12 @@ contract PinkPool is IStrategyLegacy, RewardsDistributionRecipientUpgradeable, R
         require(address(rewardsToken) == address(0), "set rewards token already");
 
         rewardsToken = IBEP20(_rewardsToken);
-        IBEP20(_rewardsToken).safeApprove(address(ROUTER), uint(~0));
+        IBEP20(_rewardsToken).safeApprove(address(ROUTER), type(uint).max);
     }
 
     function setHelper(IStrategyHelper _helper) external onlyOwner {
         require(address(_helper) != address(0), "zero address");
+        require(address(helper) == address(0), "helper already defined");
         helper = _helper;
     }
 

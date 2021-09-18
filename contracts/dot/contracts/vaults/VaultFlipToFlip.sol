@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.6.12;
+pragma solidity 0.8.7;
 pragma experimental ABIEncoderV2;
 
 /*
@@ -27,8 +27,8 @@ pragma experimental ABIEncoderV2;
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 */
 
-import "@pancakeswap/pancake-swap-lib/contracts/token/BEP20/SafeBEP20.sol";
-import "@openzeppelin/contracts/math/Math.sol";
+import "../library/pancakeswap/SafeBEP20.sol";
+import "@openzeppelin/contracts/utils/math/Math.sol";
 
 import {PoolConstant} from "../library/PoolConstant.sol";
 import "../interfaces/IPancakePair.sol";
@@ -83,11 +83,11 @@ contract VaultFlipToFlip is VaultController, IStrategy {
 
         (address _token,,,) = CAKE_MASTER_CHEF.poolInfo(_pid);
         __VaultController_init(IBEP20(_token));
-        _stakingToken.safeApprove(address(CAKE_MASTER_CHEF), uint(-1));
+        _stakingToken.safeApprove(address(CAKE_MASTER_CHEF), type(uint).max);
         pid = _pid;
         zapBSC = _zapBSC;
 
-        CAKE.safeApprove(address(zapBSC), uint(-1));
+        CAKE.safeApprove(address(zapBSC), type(uint).max);
     }
 
     /* ========== VIEW FUNCTIONS ========== */

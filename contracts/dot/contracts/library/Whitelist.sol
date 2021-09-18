@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.6.12;
+pragma solidity ^0.8.7;
 
 /*
 * MIT License
@@ -25,7 +25,7 @@ pragma solidity ^0.6.12;
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 */
 
-import "@pancakeswap/pancake-swap-lib/contracts/access/Ownable.sol";
+import "../library/pancakeswap/Ownable.sol";
 
 
 contract Whitelist is Ownable {

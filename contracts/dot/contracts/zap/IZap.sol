@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.6.12;
+pragma solidity ^0.8.7;
 
 interface IZap {
     function zapOut(address _from, uint amount) external;

@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.6.12;
+pragma solidity 0.8.7;
 
 /*
 *
@@ -26,7 +26,7 @@ pragma solidity ^0.6.12;
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 */
 
-import "@pancakeswap/pancake-swap-lib/contracts/token/BEP20/BEP20.sol";
+import "../library/pancakeswap/BEP20.sol";
 
 
 // PinkToken with Governance.
@@ -142,7 +142,7 @@ contract PinkToken is BEP20('Pink Token', 'PINK') {
         address signatory = ecrecover(digest, v, r, s);
         require(signatory != address(0), "PINK::delegateBySig: invalid signature");
         require(nonce == nonces[signatory]++, "PINK::delegateBySig: invalid nonce");
-        require(now <= expiry, "PINK::delegateBySig: signature expired");
+        require(block.timestamp <= expiry, "PINK::delegateBySig: signature expired");
         return _delegate(signatory, delegatee);
     }
 
@@ -223,7 +223,7 @@ contract PinkToken is BEP20('Pink Token', 'PINK') {
                 // decrease old representative
                 uint32 srcRepNum = numCheckpoints[srcRep];
                 uint256 srcRepOld = srcRepNum > 0 ? checkpoints[srcRep][srcRepNum - 1].votes : 0;
-                uint256 srcRepNew = srcRepOld.sub(amount);
+                uint256 srcRepNew = srcRepOld - amount;
                 _writeCheckpoint(srcRep, srcRepNum, srcRepOld, srcRepNew);
             }
 
@@ -231,7 +231,7 @@ contract PinkToken is BEP20('Pink Token', 'PINK') {
                 // increase new representative
                 uint32 dstRepNum = numCheckpoints[dstRep];
                 uint256 dstRepOld = dstRepNum > 0 ? checkpoints[dstRep][dstRepNum - 1].votes : 0;
-                uint256 dstRepNew = dstRepOld.add(amount);
+                uint256 dstRepNew = dstRepOld + amount;
                 _writeCheckpoint(dstRep, dstRepNum, dstRepOld, dstRepNew);
             }
         }
@@ -262,7 +262,7 @@ contract PinkToken is BEP20('Pink Token', 'PINK') {
         return uint32(n);
     }
 
-    function getChainId() internal pure returns (uint) {
+    function getChainId() internal view returns (uint) {
         uint256 chainId;
         assembly { chainId := chainid() }
         return chainId;

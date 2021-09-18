@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.6.12;
+pragma solidity ^0.8.7;
 
 /*
 *
@@ -26,9 +26,9 @@ pragma solidity ^0.6.12;
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 */
 
-import "@pancakeswap/pancake-swap-lib/contracts/token/BEP20/BEP20.sol";
-import "@pancakeswap/pancake-swap-lib/contracts/token/BEP20/SafeBEP20.sol";
-import "@pancakeswap/pancake-swap-lib/contracts/math/SafeMath.sol";
+import "../library/pancakeswap/BEP20.sol";
+import "../library/pancakeswap/SafeBEP20.sol";
+import "../library/pancakeswap/SafeMath.sol";
 
 import "../interfaces/IPinkMinterV1.sol";
 import "../interfaces/IStakingRewards.sol";
@@ -110,7 +110,7 @@ contract PinkMinterV1 is IPinkMinterV1, OwnableUpgradeable {
 
         pinkPerProfitBNB = 6500e18;
 
-        IBEP20(pinkToken).approve(pinkPool, uint(-1));
+        IBEP20(pinkToken).approve(pinkPool, type(uint).max);
 
         __Ownable_init();
     }
@@ -151,7 +151,7 @@ contract PinkMinterV1 is IPinkMinterV1, OwnableUpgradeable {
     function setPinkPool(address _pinkPool) external onlyOwner {
         require(_pinkPool != address(0), 'PinkMinterV1: invalid pinkPool address');
         pinkPool = _pinkPool;
-        IBEP20(pinkToken).approve(pinkPool, uint(-1));
+        IBEP20(pinkToken).approve(pinkPool, type(uint).max);
     }
 
     function setPinkChef(address _pinkChef) external onlyOwner {
